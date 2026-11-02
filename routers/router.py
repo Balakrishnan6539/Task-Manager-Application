@@ -23,27 +23,27 @@ def register_user(register_data: Register, db: Session = Depends(get_db)):
 def create_task(task_data: Task,id: int =Depends(check_the_user), db: Session = Depends(get_db)):
     return service.create_task(db, task_data,id)
 
-@router.get("/task/{task_id}", response_model=Task, dependencies=[Depends(check_the_user)])
-def get_task(task_id: int, db: Session = Depends(get_db)):
-    return service.get_task(db, task_id)
+@router.get("/task/{task_id}", response_model=Task)
+def get_task(task_id: int,id: int =Depends(check_the_user), db: Session = Depends(get_db)):
+    return service.get_task(db, task_id,id)
 
-@router.get("/tasks", response_model=list[Task],dependencies=[Depends(check_the_user)])
-def get_all_tasks(db: Session = Depends(get_db)):
-    return service.get_all_tasks(db)
+@router.get("/tasks", response_model=list[Task])
+def get_all_tasks(id: int =Depends(check_the_user),db: Session = Depends(get_db)):
+    return service.get_all_tasks(db,id)
 
-@router.put("/task/{task_id}", response_model=Task,dependencies=[Depends(check_the_user)])
-def update_task(task_id: int, task_data: Task, db: Session = Depends(get_db)):
-    return service.update_task(db, task_id, task_data)
+@router.put("/task/{task_id}", response_model=Task)
+def update_task(task_id: int, task_data: Task, id: int =Depends(check_the_user), db: Session = Depends(get_db)):
+    return service.update_task(db, task_id, task_data, id)
 
-@router.delete("/task/{task_id}",dependencies=[Depends(check_the_user)])
-def delete_task(task_id: int, db: Session = Depends(get_db)):
-    return service.delete_task(db, task_id)
+@router.delete("/task/{task_id}")
+def delete_task(task_id: int,id: int =Depends(check_the_user), db: Session = Depends(get_db)):
+    return service.delete_task(db, task_id,id)
 
-@router.get("/tasks/completed", response_model=list[Task],dependencies=[Depends(check_the_user)])
-def get_completed_tasks(db: Session = Depends(get_db)):
-    return service.get_completed_tasks(db)
+@router.get("/tasks/completed", response_model=list[Task])
+def get_completed_tasks(id: int =Depends(check_the_user),db: Session = Depends(get_db)):
+    return service.get_completed_tasks(db,id)
 
-@router.get("/tasks/pending", response_model=list[Task],dependencies=[Depends(check_the_user)])
-def get_pending_tasks(db: Session = Depends(get_db)):
-    return service.get_pending_tasks(db)
+@router.get("/tasks/pending", response_model=list[Task])
+def get_pending_tasks(id: int =Depends(check_the_user),db: Session = Depends(get_db)):
+    return service.get_pending_tasks(db,id)
 

@@ -66,9 +66,9 @@ def create_task(db: Session, task_data: Task, decoded_user_id: int):
 
     return new_task
 
-def get_task(db: Session, task_id: int):
+def get_task(db: Session, task_id: int,user_id: int):
     try:
-        task_data = db.query(Task).filter(Task.id == task_id).first()
+        task_data = db.query(Task).filter(Task.id == task_id, Task.userid == user_id).first()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error occurred while processing your request: {e}")
 
@@ -76,9 +76,9 @@ def get_task(db: Session, task_id: int):
         raise HTTPException(status_code=404, detail="Task not found")
     return task_data
 
-def update_task(db: Session, task_id: int, task_data: Task):
+def update_task(db: Session, task_id: int, task_data: Task, user_id: int):
     try:
-        existing_task = db.query(Task).filter(Task.id == task_id).first()
+        existing_task = db.query(Task).filter(Task.id == task_id, Task.userid == user_id).first()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error occurred while processing your request: {e}")
 
@@ -98,9 +98,9 @@ def update_task(db: Session, task_id: int, task_data: Task):
 
     return existing_task
 
-def delete_task(db: Session, task_id: int):
+def delete_task(db: Session, task_id: int,user_id: int):
     try:
-        task_data = db.query(Task).filter(Task.id == task_id).first()
+        task_data = db.query(Task).filter(Task.id == task_id, Task.userid == user_id).first()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error occurred while processing your request: {e}")
 
@@ -116,9 +116,9 @@ def delete_task(db: Session, task_id: int):
 
     return {"detail": "Task deleted successfully"}
 
-def get_all_tasks(db: Session):
+def get_all_tasks(db: Session,user_id: int):
     try:
-        tasks = db.query(Task).all()
+        tasks = db.query(Task).filter(Task.userid == user_id).all()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error occurred while processing your request: {e}")
 
@@ -127,9 +127,9 @@ def get_all_tasks(db: Session):
 
     return tasks
 
-def get_completed_tasks(db: Session):
+def get_completed_tasks(db: Session,user_id: int):
     try:
-        tasks = db.query(Task).filter(Task.completed == True).all()
+        tasks = db.query(Task).filter(Task.userid == user_id, Task.completed == True).all()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error occurred while processing your request: {e}")
 
@@ -138,9 +138,9 @@ def get_completed_tasks(db: Session):
 
     return tasks
 
-def get_pending_tasks(db: Session):
+def get_pending_tasks(db: Session,user_id: int):
     try:
-        tasks = db.query(Task).filter(Task.completed == False).all()
+        tasks = db.query(Task).filter(Task.userid == user_id, Task.completed == False).all()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error occurred while processing your request: {e}")
 
